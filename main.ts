@@ -518,11 +518,21 @@ class CalendarView extends ItemView {
 	}
 
 	isMultiDayEvent(event: CalendarEvent): boolean {
+		const isAllDay = this.isAllDayEvent(event);
 		const startDate = new Date(event.start);
 		startDate.setHours(0, 0, 0, 0);
 		const endDate = new Date(event.end);
 		endDate.setHours(0, 0, 0, 0);
 
+		const daysDiff = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+
+		// For all-day events, they end at 00:00 of the next day
+		// So a 1-day event has daysDiff = 1, only >1 is truly multi-day
+		if (isAllDay) {
+			return daysDiff > 1;
+		}
+
+		// For timed events, if end date is after start date, it's multi-day
 		return endDate.getTime() > startDate.getTime();
 	}
 
