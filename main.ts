@@ -497,32 +497,10 @@ class CalendarView extends ItemView {
 	}
 
 	formatDateHeader(date: Date): string {
-		const today = new Date();
-		today.setHours(0, 0, 0, 0);
-		const targetDate = new Date(date);
-		targetDate.setHours(0, 0, 0, 0);
-
-		if (targetDate.getTime() === today.getTime()) {
-			return 'Today';
-		}
-
-		const tomorrow = new Date(today);
-		tomorrow.setDate(tomorrow.getDate() + 1);
-		if (targetDate.getTime() === tomorrow.getTime()) {
-			return 'Tomorrow';
-		}
-
-		const yesterday = new Date(today);
-		yesterday.setDate(yesterday.getDate() - 1);
-		if (targetDate.getTime() === yesterday.getTime()) {
-			return 'Yesterday';
-		}
-
-		return date.toLocaleDateString('en-US', {
-			weekday: 'short',
-			month: 'short',
-			day: 'numeric'
-		});
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		return `${year}-${month}-${day}`;
 	}
 
 	formatDate(date: Date): string {
