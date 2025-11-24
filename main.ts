@@ -618,8 +618,8 @@ class CalendarView extends ItemView {
 				hasDescription: !!event.description
 			});
 
-			// Create filename: "YYYY-MM-DD Event Title"
-			const fileName = `${dateStr} ${event.summary}.md`;
+			// Create filename: "YYYY-MM-DD - Event Title"
+			const fileName = `${dateStr} - ${event.summary}.md`;
 			const folderPath = this.plugin.settings.notesFolder;
 
 			// Ensure folder exists
