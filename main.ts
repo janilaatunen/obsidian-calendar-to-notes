@@ -374,7 +374,7 @@ class CalendarView extends ItemView {
 				});
 
 				// Event time
-				const timeStr = `${this.formatDate(event.start)} - ${this.formatTime(event.end)}`;
+				const timeStr = `${this.formatTime(event.start)} - ${this.formatTime(event.end)}`;
 				eventEl.createEl('div', {
 					text: timeStr,
 					cls: 'meeting-notes-event-time'
