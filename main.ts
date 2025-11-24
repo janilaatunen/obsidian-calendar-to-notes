@@ -34,10 +34,11 @@ export default class MeetingNotesPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
+		await this.loadCachedEvents();
 
 		console.log('Meeting Notes plugin loaded');
 
-		// Load events immediately on startup
+		// Fetch fresh events on startup
 		if (this.settings.icsUrl) {
 			this.fetchCalendarEvents();
 		}
@@ -114,6 +115,47 @@ export default class MeetingNotesPlugin extends Plugin {
 		await this.saveData(this.settings);
 	}
 
+	async loadCachedEvents() {
+		try {
+			const data = await this.loadData();
+			if (data && data.cachedEvents) {
+				// Convert date strings back to Date objects
+				this.events = data.cachedEvents.map((event: any) => ({
+					...event,
+					start: new Date(event.start),
+					end: new Date(event.end)
+				}));
+				console.log(`Loaded ${this.events.length} cached events`);
+
+				// Update the calendar view if it's open
+				const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
+				leaves.forEach(leaf => {
+					if (leaf.view instanceof CalendarView) {
+						leaf.view.refresh();
+					}
+				});
+			}
+		} catch (error) {
+			console.error('Error loading cached events:', error);
+		}
+	}
+
+	async saveEvents() {
+		try {
+			const data = await this.loadData() || {};
+			// Convert Date objects to ISO strings for storage
+			data.cachedEvents = this.events.map(event => ({
+				...event,
+				start: event.start.toISOString(),
+				end: event.end.toISOString()
+			}));
+			await this.saveData(data);
+			console.log(`Cached ${this.events.length} events`);
+		} catch (error) {
+			console.error('Error saving events:', error);
+		}
+	}
+
 	async fetchCalendarEvents() {
 		if (!this.settings.icsUrl) {
 			new Notice('Please configure ICS URL in settings');
@@ -132,7 +174,7 @@ export default class MeetingNotesPlugin extends Plugin {
 			}
 
 			const icsData = response.text;
-			this.parseICSData(icsData);
+			await this.parseICSData(icsData);
 
 			new Notice(`Loaded ${this.events.length} calendar events`);
 			console.log('Calendar events loaded:');
@@ -145,7 +187,7 @@ export default class MeetingNotesPlugin extends Plugin {
 		}
 	}
 
-	parseICSData(icsData: string) {
+	async parseICSData(icsData: string) {
 		try {
 			const jcalData = ICAL.parse(icsData);
 			const comp = new ICAL.Component(jcalData);
@@ -241,6 +283,9 @@ export default class MeetingNotesPlugin extends Plugin {
 
 			// Sort events by start date
 			this.events.sort((a, b) => a.start.getTime() - b.start.getTime());
+
+			// Save events to cache
+			await this.saveEvents();
 
 			// Update the calendar view if it's open
 			const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
