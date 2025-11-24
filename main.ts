@@ -461,19 +461,18 @@ class CalendarView extends ItemView {
 	}
 
 	formatDate(date: Date): string {
-		return date.toLocaleDateString('en-US', {
-			month: 'short',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit'
-		});
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		return `${year}-${month}-${day} ${hours}:${minutes}`;
 	}
 
 	formatTime(date: Date): string {
-		return date.toLocaleTimeString('en-US', {
-			hour: '2-digit',
-			minute: '2-digit'
-		});
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		return `${hours}:${minutes}`;
 	}
 
 	async createNoteFromEvent(event: CalendarEvent) {
@@ -490,8 +489,14 @@ class CalendarView extends ItemView {
 			const templateContent = await this.app.vault.read(templateFile as any);
 
 			// Format the date for the filename and frontmatter
-			const dateStr = event.start.toISOString().split('T')[0]; // YYYY-MM-DD
-			const timeStr = event.start.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+			const year = event.start.getFullYear();
+			const month = String(event.start.getMonth() + 1).padStart(2, '0');
+			const day = String(event.start.getDate()).padStart(2, '0');
+			const hours = String(event.start.getHours()).padStart(2, '0');
+			const minutes = String(event.start.getMinutes()).padStart(2, '0');
+
+			const dateStr = `${year}-${month}-${day}`; // YYYY-MM-DD
+			const timeStr = `${hours}:${minutes}`; // 24-hour format
 
 			// Replace placeholders in template (preserve line breaks)
 			let noteContent = templateContent;
