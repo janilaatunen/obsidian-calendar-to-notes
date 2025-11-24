@@ -25,7 +25,7 @@ An Obsidian plugin that syncs ICS calendar events and creates meeting notes auto
 1. Clone this repository or download the source code
 2. Run `npm install` to install dependencies
 3. Run `npm run build` to build the plugin
-4. Copy `main.js`, `manifest.json`, and `styles.css` to your vault's `.obsidian/plugins/obsidian-meeting-notes-from-calendar/` folder
+4. Copy `main.js`, `manifest.json`, and `styles.css` to your vault's `.obsidian/plugins/calendar-to-notes/` folder
 5. Reload Obsidian
 6. Enable the plugin in Settings → Community plugins
 
