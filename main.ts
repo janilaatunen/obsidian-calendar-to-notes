@@ -8,13 +8,15 @@ interface MeetingNotesSettings {
 	templatePath: string;
 	notesFolder: string;
 	trimTeamsLinks: boolean;
+	hideAllDayEvents: boolean;
 }
 
 const DEFAULT_SETTINGS: MeetingNotesSettings = {
 	icsUrl: '',
 	templatePath: 'Templates/Meeting',
 	notesFolder: 'Notes',
-	trimTeamsLinks: true
+	trimTeamsLinks: true,
+	hideAllDayEvents: false
 }
 
 interface CalendarEvent {
@@ -479,6 +481,11 @@ class CalendarView extends ItemView {
 			const eventEnd = new Date(event.end);
 			const isAllDay = this.isAllDayEvent(event);
 
+			// Hide all-day events if setting is enabled
+			if (this.plugin.settings.hideAllDayEvents && isAllDay) {
+				return false;
+			}
+
 			// For all-day events, the end time is at 00:00 of the next day
 			// Subtract 1ms so they don't appear on the end day
 			if (isAllDay) {
@@ -805,6 +812,23 @@ class MeetingNotesSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					this.plugin.settings.trimTeamsLinks = value;
 					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Hide All-Day Events')
+			.setDesc('Hide all-day events from the calendar view')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.hideAllDayEvents)
+				.onChange(async (value) => {
+					this.plugin.settings.hideAllDayEvents = value;
+					await this.plugin.saveSettings();
+					// Refresh the calendar view
+					const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
+					leaves.forEach(leaf => {
+						if (leaf.view instanceof CalendarView) {
+							leaf.view.refresh();
+						}
+					});
 				}));
 	}
 }
