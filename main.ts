@@ -497,10 +497,12 @@ class CalendarView extends ItemView {
 	}
 
 	formatDateHeader(date: Date): string {
-		const year = date.getFullYear();
-		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		const weekday = weekdays[date.getDay()];
 		const day = String(date.getDate()).padStart(2, '0');
-		return `${year}-${month}-${day}`;
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const year = date.getFullYear();
+		return `${weekday}, ${day}.${month}.${year}`;
 	}
 
 	formatDate(date: Date): string {
