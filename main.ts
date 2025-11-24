@@ -77,6 +77,11 @@ export default class MeetingNotesPlugin extends Plugin {
 				this.fetchCalendarEvents();
 			}
 		});
+
+		// Auto-open the calendar view on startup
+		this.app.workspace.onLayoutReady(() => {
+			this.activateView();
+		});
 	}
 
 	onunload() {
