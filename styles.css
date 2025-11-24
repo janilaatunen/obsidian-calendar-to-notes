@@ -1,0 +1,122 @@
+.meeting-notes-view {
+	padding: 10px;
+	font-size: 0.9em;
+}
+
+.meeting-notes-header {
+	display: flex;
+	margin-bottom: 15px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.meeting-notes-date-nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+}
+
+.meeting-notes-nav-btn {
+	padding: 4px 8px;
+	cursor: pointer;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: 1px solid var(--background-modifier-border);
+}
+
+.meeting-notes-nav-btn:hover {
+	background: var(--background-modifier-hover);
+}
+
+.meeting-notes-nav-btn svg {
+	width: 16px;
+	height: 16px;
+}
+
+.meeting-notes-date-display {
+	font-weight: 600;
+	font-size: 0.85em;
+	min-width: 100px;
+	text-align: center;
+}
+
+.meeting-notes-today-btn {
+	padding: 4px 10px;
+	cursor: pointer;
+	border-radius: 4px;
+	font-size: 0.85em;
+}
+
+.meeting-notes-refresh-btn {
+	padding: 4px 8px;
+	cursor: pointer;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: 1px solid var(--background-modifier-border);
+}
+
+.meeting-notes-refresh-btn:hover {
+	background: var(--background-modifier-hover);
+}
+
+.meeting-notes-refresh-btn svg {
+	width: 16px;
+	height: 16px;
+}
+
+.meeting-notes-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.meeting-notes-empty {
+	color: var(--text-muted);
+	text-align: center;
+	padding: 20px;
+	font-size: 0.9em;
+}
+
+.meeting-notes-event {
+	padding: 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	background: var(--background-secondary);
+}
+
+.meeting-notes-event-title {
+	font-weight: 600;
+	margin-bottom: 6px;
+	font-size: 1em;
+}
+
+.meeting-notes-event-time {
+	color: var(--text-muted);
+	font-size: 0.85em;
+	margin-bottom: 4px;
+}
+
+.meeting-notes-event-location {
+	color: var(--text-muted);
+	font-size: 0.85em;
+	margin-bottom: 8px;
+}
+
+.meeting-notes-event-actions {
+	margin-top: 10px;
+}
+
+.meeting-notes-create-btn {
+	padding: 6px 12px;
+	cursor: pointer;
+	border-radius: 4px;
+	font-size: 0.9em;
+}
