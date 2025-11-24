@@ -477,6 +477,13 @@ class CalendarView extends ItemView {
 		const filtered = this.plugin.events.filter(event => {
 			const eventStart = new Date(event.start);
 			const eventEnd = new Date(event.end);
+			const isAllDay = this.isAllDayEvent(event);
+
+			// For all-day events, the end time is at 00:00 of the next day
+			// Subtract 1ms so they don't appear on the end day
+			if (isAllDay) {
+				eventEnd.setTime(eventEnd.getTime() - 1);
+			}
 
 			// Check if event overlaps with the target day
 			const matches = (eventStart >= dayStart && eventStart <= dayEnd) ||
