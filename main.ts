@@ -340,11 +340,11 @@ class CalendarView extends ItemView {
 		// Header with navigation
 		const header = container.createEl('div', { cls: 'meeting-notes-header' });
 
-		// Date navigation section
-		const dateNav = header.createEl('div', { cls: 'meeting-notes-date-nav' });
+		// Left-aligned navigation group
+		const leftNav = header.createEl('div', { cls: 'meeting-notes-nav-left' });
 
-		// Today button (leftmost)
-		const todayBtn = dateNav.createEl('button', {
+		// Today button
+		const todayBtn = leftNav.createEl('button', {
 			text: 'Today',
 			cls: 'meeting-notes-today-btn'
 		});
@@ -355,8 +355,8 @@ class CalendarView extends ItemView {
 		});
 
 		// Previous day button
-		const prevBtn = dateNav.createEl('button', {
-			cls: 'meeting-notes-nav-btn',
+		const prevBtn = leftNav.createEl('button', {
+			cls: 'meeting-notes-icon-btn',
 			attr: { 'aria-label': 'Previous day' }
 		});
 		prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>';
@@ -365,15 +365,9 @@ class CalendarView extends ItemView {
 			this.refresh();
 		});
 
-		// Current date display
-		const dateDisplay = dateNav.createEl('div', {
-			cls: 'meeting-notes-date-display',
-			text: this.formatDateHeader(this.currentDate)
-		});
-
 		// Next day button
-		const nextBtn = dateNav.createEl('button', {
-			cls: 'meeting-notes-nav-btn',
+		const nextBtn = leftNav.createEl('button', {
+			cls: 'meeting-notes-icon-btn',
 			attr: { 'aria-label': 'Next day' }
 		});
 		nextBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
@@ -382,9 +376,18 @@ class CalendarView extends ItemView {
 			this.refresh();
 		});
 
-		// Refresh button with icon (rightmost)
-		const refreshBtn = dateNav.createEl('button', {
-			cls: 'meeting-notes-refresh-btn',
+		// Current date display
+		const dateDisplay = leftNav.createEl('div', {
+			cls: 'meeting-notes-date-display',
+			text: this.formatDateHeader(this.currentDate)
+		});
+
+		// Right-aligned navigation group
+		const rightNav = header.createEl('div', { cls: 'meeting-notes-nav-right' });
+
+		// Refresh button
+		const refreshBtn = rightNav.createEl('button', {
+			cls: 'meeting-notes-icon-btn',
 			attr: { 'aria-label': 'Refresh events' }
 		});
 		refreshBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>';

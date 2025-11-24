@@ -5,21 +5,26 @@
 
 .meeting-notes-header {
 	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	margin-bottom: 15px;
 	padding-bottom: 10px;
 	border-bottom: 1px solid var(--background-modifier-border);
 }
 
-.meeting-notes-date-nav {
+.meeting-notes-nav-left {
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	width: 100%;
+	gap: 6px;
 }
 
-.meeting-notes-nav-btn {
-	padding: 4px 8px;
+.meeting-notes-nav-right {
+	display: flex;
+	align-items: center;
+}
+
+.meeting-notes-icon-btn {
+	padding: 4px;
 	cursor: pointer;
 	border-radius: 4px;
 	display: flex;
@@ -27,13 +32,16 @@
 	justify-content: center;
 	background: transparent;
 	border: none;
+	color: var(--icon-color);
+	opacity: 0.8;
 }
 
-.meeting-notes-nav-btn:hover {
+.meeting-notes-icon-btn:hover {
+	opacity: 1;
 	background: var(--background-modifier-hover);
 }
 
-.meeting-notes-nav-btn svg {
+.meeting-notes-icon-btn svg {
 	width: 16px;
 	height: 16px;
 }
@@ -41,8 +49,7 @@
 .meeting-notes-date-display {
 	font-weight: 600;
 	font-size: 0.85em;
-	min-width: 100px;
-	text-align: center;
+	margin-left: 4px;
 }
 
 .meeting-notes-today-btn {
@@ -56,26 +63,6 @@
 
 .meeting-notes-today-btn:hover {
 	background: var(--background-modifier-hover);
-}
-
-.meeting-notes-refresh-btn {
-	padding: 4px 8px;
-	cursor: pointer;
-	border-radius: 4px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background: transparent;
-	border: none;
-}
-
-.meeting-notes-refresh-btn:hover {
-	background: var(--background-modifier-hover);
-}
-
-.meeting-notes-refresh-btn svg {
-	width: 16px;
-	height: 16px;
 }
 
 .meeting-notes-list {
