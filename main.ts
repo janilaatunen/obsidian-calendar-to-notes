@@ -380,13 +380,6 @@ class CalendarView extends ItemView {
 					cls: 'meeting-notes-event-time'
 				});
 
-				// Location if present
-				if (event.location) {
-					eventEl.createEl('div', {
-						text: `📍 ${event.location}`,
-						cls: 'meeting-notes-event-location'
-					});
-				}
 
 				// Create note button
 				const btnContainer = eventEl.createEl('div', { cls: 'meeting-notes-event-actions' });
