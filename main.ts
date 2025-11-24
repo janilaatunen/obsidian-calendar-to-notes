@@ -374,7 +374,8 @@ class CalendarView extends ItemView {
 				});
 
 				// Event time
-				const timeStr = `${this.formatTime(event.start)} - ${this.formatTime(event.end)}`;
+				const isAllDay = this.isAllDayEvent(event);
+				const timeStr = isAllDay ? 'All Day' : `${this.formatTime(event.start)} - ${this.formatTime(event.end)}`;
 				eventEl.createEl('div', {
 					text: timeStr,
 					cls: 'meeting-notes-event-time'
@@ -421,7 +422,30 @@ class CalendarView extends ItemView {
 		});
 
 		console.log(`Found ${filtered.length} events for this day`);
+
+		// Sort events: all-day events first, then by start time
+		filtered.sort((a, b) => {
+			const aIsAllDay = this.isAllDayEvent(a);
+			const bIsAllDay = this.isAllDayEvent(b);
+
+			// All-day events come first
+			if (aIsAllDay && !bIsAllDay) return -1;
+			if (!aIsAllDay && bIsAllDay) return 1;
+
+			// Otherwise sort by start time
+			return a.start.getTime() - b.start.getTime();
+		});
+
 		return filtered;
+	}
+
+	isAllDayEvent(event: CalendarEvent): boolean {
+		const startHours = event.start.getHours();
+		const startMinutes = event.start.getMinutes();
+		const endHours = event.end.getHours();
+		const endMinutes = event.end.getMinutes();
+
+		return startHours === 0 && startMinutes === 0 && endHours === 0 && endMinutes === 0;
 	}
 
 	formatDateHeader(date: Date): string {
