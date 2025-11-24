@@ -193,14 +193,14 @@ export default class MeetingNotesPlugin extends Plugin {
 			const comp = new ICAL.Component(jcalData);
 			const vevents = comp.getAllSubcomponents('vevent');
 
-			// Define date range: 1 week before and 2 weeks after today
+			// Define date range: 2 weeks before and 4 weeks after today
 			const today = new Date();
-			const oneWeekAgo = new Date(today);
-			oneWeekAgo.setDate(today.getDate() - 7);
-			const twoWeeksLater = new Date(today);
-			twoWeeksLater.setDate(today.getDate() + 14);
+			const twoWeeksAgo = new Date(today);
+			twoWeeksAgo.setDate(today.getDate() - 14);
+			const fourWeeksLater = new Date(today);
+			fourWeeksLater.setDate(today.getDate() + 28);
 
-			console.log(`Filtering events between ${oneWeekAgo.toLocaleDateString()} and ${twoWeeksLater.toLocaleDateString()}`);
+			console.log(`Filtering events between ${twoWeeksAgo.toLocaleDateString()} and ${fourWeeksLater.toLocaleDateString()}`);
 
 			const allEvents: CalendarEvent[] = [];
 
@@ -234,10 +234,10 @@ export default class MeetingNotesPlugin extends Plugin {
 						const occurrence = next.toJSDate();
 
 						// Stop if we're past our date range
-						if (occurrence > twoWeeksLater) break;
+						if (occurrence > fourWeeksLater) break;
 
 						// Only include if within our date range
-						if (occurrence >= oneWeekAgo && occurrence <= twoWeeksLater) {
+						if (occurrence >= twoWeeksAgo && occurrence <= fourWeeksLater) {
 							const duration = event.duration.toSeconds() * 1000; // Convert to milliseconds
 							const endDate = new Date(occurrence.getTime() + duration);
 
@@ -256,7 +256,7 @@ export default class MeetingNotesPlugin extends Plugin {
 					// Single event
 					const startDate = event.startDate.toJSDate();
 
-					if (startDate >= oneWeekAgo && startDate <= twoWeeksLater) {
+					if (startDate >= twoWeeksAgo && startDate <= fourWeeksLater) {
 						allEvents.push({
 							uid: event.uid,
 							summary: event.summary || 'Untitled Event',
