@@ -423,7 +423,23 @@ class CalendarView extends ItemView {
 
 				// Event time
 				const isAllDay = this.isAllDayEvent(event);
-				const timeStr = isAllDay ? 'All Day' : `${this.formatTime(event.start)} - ${this.formatTime(event.end)}`;
+				const isMultiDay = this.isMultiDayEvent(event);
+
+				let timeStr: string;
+				if (isAllDay && isMultiDay) {
+					// All-day multi-day event: show date range
+					timeStr = `${this.formatDateOnly(event.start)} - ${this.formatDateOnly(event.end)}`;
+				} else if (isMultiDay) {
+					// Multi-day event with times: show full date+time range
+					timeStr = `${this.formatDateOnly(event.start)} ${this.formatTime(event.start)} - ${this.formatDateOnly(event.end)} ${this.formatTime(event.end)}`;
+				} else if (isAllDay) {
+					// Single-day all-day event
+					timeStr = 'All Day';
+				} else {
+					// Regular single-day event: show time range only
+					timeStr = `${this.formatTime(event.start)} - ${this.formatTime(event.end)}`;
+				}
+
 				eventEl.createEl('div', {
 					text: timeStr,
 					cls: 'meeting-notes-event-time'
@@ -494,6 +510,22 @@ class CalendarView extends ItemView {
 		const endMinutes = event.end.getMinutes();
 
 		return startHours === 0 && startMinutes === 0 && endHours === 0 && endMinutes === 0;
+	}
+
+	isMultiDayEvent(event: CalendarEvent): boolean {
+		const startDate = new Date(event.start);
+		startDate.setHours(0, 0, 0, 0);
+		const endDate = new Date(event.end);
+		endDate.setHours(0, 0, 0, 0);
+
+		return endDate.getTime() > startDate.getTime();
+	}
+
+	formatDateOnly(date: Date): string {
+		const day = String(date.getDate()).padStart(2, '0');
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const year = date.getFullYear();
+		return `${day}.${month}.${year}`;
 	}
 
 	formatDateHeader(date: Date): string {
