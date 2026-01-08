@@ -1,5 +1,7 @@
 # Calendar to Notes
 
+> **⚠️ Disclaimer:** This plugin was vibe coded. It works, but edge cases may exist. Use at your own risk and always back up your vault before use.
+
 An Obsidian plugin that syncs ICS calendar events and creates meeting notes automatically.
 
 ## Features
