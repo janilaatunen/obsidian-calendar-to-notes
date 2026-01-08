@@ -581,6 +581,12 @@ class CalendarView extends ItemView {
 		return `${hours}:${minutes}`;
 	}
 
+	sanitizeFilename(filename: string): string {
+		// Remove or replace illegal filename characters
+		// Illegal characters: / \ : * ? " < > |
+		return filename.replace(/[/\\:*?"<>|]/g, '');
+	}
+
 	async createNoteFromEvent(event: CalendarEvent) {
 		try {
 			// Read the template
@@ -648,7 +654,8 @@ class CalendarView extends ItemView {
 			});
 
 			// Create filename: "YYYY-MM-DD - Event Title"
-			const fileName = `${dateStr} - ${event.summary}.md`;
+			const sanitizedSummary = this.sanitizeFilename(event.summary);
+			const fileName = `${dateStr} - ${sanitizedSummary}.md`;
 			const folderPath = this.plugin.settings.notesFolder;
 
 			// Ensure folder exists
