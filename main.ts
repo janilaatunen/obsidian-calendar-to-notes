@@ -76,7 +76,7 @@ export default class MeetingNotesPlugin extends Plugin {
 			id: 'refresh-calendar-events',
 			name: 'Refresh calendar events',
 			callback: () => {
-				this.fetchCalendarEvents();
+				this.fetchCalendarEvents(true);
 			}
 		});
 
@@ -165,14 +165,18 @@ export default class MeetingNotesPlugin extends Plugin {
 		}
 	}
 
-	async fetchCalendarEvents() {
+	async fetchCalendarEvents(isManual: boolean = false) {
 		if (!this.settings.icsUrl) {
-			new Notice('Please configure ICS URL in settings');
+			if (isManual) {
+				new Notice('Please configure ICS URL in settings');
+			}
 			return;
 		}
 
 		try {
-			new Notice('Fetching calendar events...');
+			if (isManual) {
+				new Notice('Fetching calendar events...');
+			}
 			const response = await requestUrl({
 				url: this.settings.icsUrl,
 				method: 'GET'
@@ -185,14 +189,18 @@ export default class MeetingNotesPlugin extends Plugin {
 			const icsData = response.text;
 			await this.parseICSData(icsData);
 
-			new Notice(`Loaded ${this.events.length} calendar events`);
+			if (isManual) {
+				new Notice(`Loaded ${this.events.length} calendar events`);
+			}
 			console.log('Calendar events loaded:');
 			this.events.forEach(event => {
 				console.log(`- ${event.summary}: ${event.start.toLocaleString()} to ${event.end.toLocaleString()}`);
 			});
 		} catch (error) {
 			console.error('Error fetching calendar:', error);
-			new Notice('Error fetching calendar events. Check console for details.');
+			if (isManual) {
+				new Notice('Error fetching calendar events. Check console for details.');
+			}
 		}
 	}
 
@@ -202,14 +210,14 @@ export default class MeetingNotesPlugin extends Plugin {
 			const comp = new ICAL.Component(jcalData);
 			const vevents = comp.getAllSubcomponents('vevent');
 
-			// Define date range: 2 weeks before and 4 weeks after today
+			// Define date range: 4 weeks before and 6 weeks after today
 			const today = new Date();
-			const twoWeeksAgo = new Date(today);
-			twoWeeksAgo.setDate(today.getDate() - 14);
-			const fourWeeksLater = new Date(today);
-			fourWeeksLater.setDate(today.getDate() + 28);
+			const fourWeeksAgo = new Date(today);
+			fourWeeksAgo.setDate(today.getDate() - 28);
+			const sixWeeksLater = new Date(today);
+			sixWeeksLater.setDate(today.getDate() + 42);
 
-			console.log(`Filtering events between ${twoWeeksAgo.toLocaleDateString()} and ${fourWeeksLater.toLocaleDateString()}`);
+			console.log(`Filtering events between ${fourWeeksAgo.toLocaleDateString()} and ${sixWeeksLater.toLocaleDateString()}`);
 
 			const allEvents: CalendarEvent[] = [];
 
@@ -243,10 +251,10 @@ export default class MeetingNotesPlugin extends Plugin {
 						const occurrence = next.toJSDate();
 
 						// Stop if we're past our date range
-						if (occurrence > fourWeeksLater) break;
+						if (occurrence > sixWeeksLater) break;
 
 						// Only include if within our date range
-						if (occurrence >= twoWeeksAgo && occurrence <= fourWeeksLater) {
+						if (occurrence >= fourWeeksAgo && occurrence <= sixWeeksLater) {
 							const duration = event.duration.toSeconds() * 1000; // Convert to milliseconds
 							const endDate = new Date(occurrence.getTime() + duration);
 
@@ -265,7 +273,7 @@ export default class MeetingNotesPlugin extends Plugin {
 					// Single event
 					const startDate = event.startDate.toJSDate();
 
-					if (startDate >= twoWeeksAgo && startDate <= fourWeeksLater) {
+					if (startDate >= fourWeeksAgo && startDate <= sixWeeksLater) {
 						allEvents.push({
 							uid: event.uid,
 							summary: event.summary || 'Untitled Event',
@@ -401,7 +409,7 @@ class CalendarView extends ItemView {
 		});
 		refreshBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>';
 		refreshBtn.addEventListener('click', () => {
-			this.plugin.fetchCalendarEvents();
+			this.plugin.fetchCalendarEvents(true);
 		});
 
 		// Events list

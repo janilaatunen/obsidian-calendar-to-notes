@@ -1,6 +1,6 @@
 {
   "name": "obsidian-calendar-to-notes",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Sync ICS calendar events and create meeting notes in Obsidian",
   "main": "main.js",
   "scripts": {
