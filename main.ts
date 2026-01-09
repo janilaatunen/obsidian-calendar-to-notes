@@ -1,4 +1,4 @@
-import { App, Plugin, PluginSettingTab, Setting, Notice, ItemView, WorkspaceLeaf, Modal, requestUrl } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting, Notice, ItemView, WorkspaceLeaf, Modal, requestUrl, Platform } from 'obsidian';
 import ICAL from 'ical.js';
 
 const VIEW_TYPE_CALENDAR = 'calendar-view';
@@ -80,9 +80,11 @@ export default class MeetingNotesPlugin extends Plugin {
 			}
 		});
 
-		// Auto-open the calendar view on startup
+		// Auto-open the calendar view on startup (desktop only)
 		this.app.workspace.onLayoutReady(() => {
-			this.activateView();
+			if (!Platform.isMobile) {
+				this.activateView();
+			}
 		});
 	}
 
