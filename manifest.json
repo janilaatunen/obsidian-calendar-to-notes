@@ -1,9 +1,9 @@
 {
   "id": "calendar-to-notes",
   "name": "Calendar to Notes",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "minAppVersion": "0.15.0",
-  "description": "View ICS calendar events and create meeting notes from them",
+  "description": "Sync ICS calendar events, view in a calendar sidebar, and create meeting notes from templates",
   "author": "Jani Laatunen",
   "authorUrl": "",
   "isDesktopOnly": false

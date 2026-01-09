@@ -1,72 +1,61 @@
 # Calendar to Notes
 
-> **⚠️ Disclaimer:** This plugin was vibe coded. It works, but edge cases may exist. Use at your own risk and always back up your vault before use.
+> **⚠️ Disclaimer:** This plugin was vibe coded. Use at your own risk and back up your vault.
 
-An Obsidian plugin that syncs ICS calendar events and creates meeting notes automatically.
+Sync ICS calendar events to Obsidian, view them in a sidebar calendar, and create meeting notes from templates.
 
 ## Features
 
-- 📅 **ICS Calendar Sync** - Connect to any ICS calendar URL (Outlook, Google Calendar, etc.)
-- 🔄 **Auto-refresh** - Events load on startup and refresh every 12 hours
-- 📝 **One-click Note Creation** - Generate meeting notes from calendar events using templates
-- 🗓️ **Day Navigation** - Browse events by day with intuitive navigation
-- 🧹 **Teams Link Trimming** - Automatically removes Microsoft Teams boilerplate from meeting descriptions
-- ⚡ **Recurring Events Support** - Properly handles recurring calendar events
+- **ICS Calendar Sync** - Connect to any ICS URL (Outlook, Google Calendar, etc.)
+- **Auto-refresh** - Loads on startup, refreshes every 12 hours, 4 weeks past + 6 weeks future
+- **Calendar Sidebar** - Browse events by day with navigation controls (desktop only on startup)
+- **One-click Notes** - Create meeting notes from events using your template
+- **Teams Link Trimming** - Removes Microsoft Teams boilerplate from descriptions
+- **Recurring Events** - Properly handles recurring calendar events
+- **All-day Events** - Shows all-day events on correct day only
+- **Silent Auto-sync** - Background refreshes don't show notifications
 
 ## Installation
 
-### From GitHub
-
-1. Download the latest release from the [Releases](https://github.com/jlaatu/obsidian-calendar-to-notes/releases) page
-2. Extract the files to your vault's `.obsidian/plugins/calendar-to-notes/` folder
-3. Reload Obsidian
-4. Enable the plugin in Settings → Community plugins
-
-### Manual Installation
-
-1. Clone this repository or download the source code
-2. Run `npm install` to install dependencies
-3. Run `npm run build` to build the plugin
-4. Copy `main.js`, `manifest.json`, and `styles.css` to your vault's `.obsidian/plugins/calendar-to-notes/` folder
-5. Reload Obsidian
-6. Enable the plugin in Settings → Community plugins
+1. Download `main.js`, `manifest.json`, and `styles.css` from releases
+2. Create folder: `.obsidian/plugins/calendar-to-notes/`
+3. Copy files into folder
+4. Restart Obsidian
+5. Enable in Settings → Community Plugins
 
 ## Setup
 
-1. Go to **Settings → Calendar to Notes**
-2. Configure your settings:
-   - **ICS Calendar URL**: Your calendar's ICS feed URL
-   - **Template Path**: Path to your meeting note template (default: `Templates/Meeting`)
-   - **Notes Folder**: Where meeting notes will be created (default: `Notes`)
-   - **Trim Teams Links**: Toggle to remove Microsoft Teams footer from descriptions
+Go to Settings → Calendar to Notes:
+
+- **ICS Calendar URL**: Your calendar's ICS feed URL
+- **Template Path**: Path to meeting template (default: `Templates/Meeting`)
+- **Notes Folder**: Where notes are created (default: `Notes`)
+- **Trim Teams Links**: Remove Teams footer from descriptions (default: enabled)
 
 ## Usage
 
-### Opening the Calendar View
+### Calendar View
 
-- Use **Command Palette** (Ctrl/Cmd + P) → "Open calendar view"
-- The view will open in the right sidebar
+- **Command Palette** (Ctrl/Cmd + P) → "Open calendar view"
+- Opens in right sidebar (desktop only on startup)
+- **Today**: Jump to current date
+- **← →**: Navigate days
+- **🔄**: Manual refresh (shows notifications)
 
-### Navigating Events
+### Create Meeting Notes
 
-- **Today**: Jump to today's date
-- **← →**: Navigate previous/next day
-- **🔄**: Refresh calendar events
-
-### Creating Meeting Notes
-
-1. Click the **"Create Note"** button on any event
-2. A new note will be created using your template with:
-   - Event title in the filename
+1. Click **"Create Note"** on any event
+2. Note created with:
+   - Sanitized event title in filename
    - Date and time in frontmatter
-   - Attendees as links (if available)
-   - Meeting description in a quote block
+   - Attendees as links
+   - Description in quote block
 
-## Template Setup
+## Template Example
 
-Create a meeting template (e.g., `Templates/Meeting.md`):
+Create `Templates/Meeting.md`:
 
-\`\`\`markdown
+```markdown
 ---
 tags:
   - Meeting
@@ -85,54 +74,26 @@ attendees:
 ## Decisions Made
 
 ## Follow-up
-\`\`\`
+```
 
-The plugin will automatically populate `date:`, `time:`, and `attendees:` fields.
+Fields `date`, `time`, and `attendees` auto-populate.
 
 ## Settings
 
-| Setting | Description | Default |
-|---------|-------------|---------|
-| ICS Calendar URL | URL to your ICS calendar feed | (empty) |
-| Template Path | Path to meeting note template | `Templates/Meeting` |
-| Notes Folder | Folder where notes will be created | `Notes` |
-| Trim Teams Links | Remove Microsoft Teams footer | Enabled |
+| Setting | Default |
+|---------|---------|
+| ICS Calendar URL | (empty) |
+| Template Path | `Templates/Meeting` |
+| Notes Folder | `Notes` |
+| Trim Teams Links | Enabled |
 
 ## Development
 
-### Building the Plugin
-
 ```bash
-# Install dependencies
 npm install
-
-# Build for production
 npm run build
-
-# Build and watch for changes
-npm run dev
-```
-
-### Project Structure
-
-```
-obsidian-calendar-to-notes/
-├── main.ts              # Main plugin code
-├── styles.css           # Plugin styles
-├── manifest.json        # Plugin manifest
-├── package.json         # NPM dependencies
-├── tsconfig.json        # TypeScript config
-└── esbuild.config.mjs   # Build configuration
 ```
 
 ## License
 
-MIT
-
-## Support
-
-If you encounter any issues or have suggestions, please [open an issue](https://github.com/jlaatu/obsidian-calendar-to-notes/issues) on GitHub.
-
-## Credits
-
-Developed by Jani Laatunen with assistance from Claude (Anthropic).
+MIT © 2026 Jani Laatunen
