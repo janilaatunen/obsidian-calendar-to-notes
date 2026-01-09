@@ -784,7 +784,9 @@ class MeetingNotesSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: 'Calendar Settings' });
+		containerEl.createEl('h1', { text: 'Calendar to Notes Settings' });
+
+		containerEl.createEl('h2', { text: 'Calendar' });
 
 		new Setting(containerEl)
 			.setName('ICS Calendar URL')
@@ -797,7 +799,24 @@ class MeetingNotesSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 
-		containerEl.createEl('h2', { text: 'Note Creation Settings' });
+		new Setting(containerEl)
+			.setName('Hide All-Day Events')
+			.setDesc('Hide all-day events from the calendar view')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.hideAllDayEvents)
+				.onChange(async (value) => {
+					this.plugin.settings.hideAllDayEvents = value;
+					await this.plugin.saveSettings();
+					// Refresh the calendar view
+					const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
+					leaves.forEach(leaf => {
+						if (leaf.view instanceof CalendarView) {
+							leaf.view.refresh();
+						}
+					});
+				}));
+
+		containerEl.createEl('h2', { text: 'Note Creation' });
 
 		new Setting(containerEl)
 			.setName('Template Path')
@@ -829,23 +848,6 @@ class MeetingNotesSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					this.plugin.settings.trimTeamsLinks = value;
 					await this.plugin.saveSettings();
-				}));
-
-		new Setting(containerEl)
-			.setName('Hide All-Day Events')
-			.setDesc('Hide all-day events from the calendar view')
-			.addToggle(toggle => toggle
-				.setValue(this.plugin.settings.hideAllDayEvents)
-				.onChange(async (value) => {
-					this.plugin.settings.hideAllDayEvents = value;
-					await this.plugin.saveSettings();
-					// Refresh the calendar view
-					const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
-					leaves.forEach(leaf => {
-						if (leaf.view instanceof CalendarView) {
-							leaf.view.refresh();
-						}
-					});
 				}));
 	}
 }
