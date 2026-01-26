@@ -463,11 +463,12 @@ class CalendarView extends ItemView {
 				});
 
 
-				// Create note button
+				// Create/Open note button
 				const btnContainer = eventEl.createEl('div', { cls: 'meeting-notes-event-actions' });
+				const noteExists = this.noteExistsForEvent(event);
 				const createBtn = btnContainer.createEl('button', {
-					text: 'Create Note',
-					cls: 'meeting-notes-create-btn'
+					text: noteExists ? 'Open Note' : 'Create Note',
+					cls: noteExists ? 'meeting-notes-open-btn' : 'meeting-notes-create-btn'
 				});
 				createBtn.addEventListener('click', () => {
 					this.createNoteFromEvent(event);
@@ -592,9 +593,31 @@ class CalendarView extends ItemView {
 	}
 
 	sanitizeFilename(filename: string): string {
-		// Remove or replace illegal filename characters
-		// Illegal characters: / \ : * ? " < > |
+		// Remove illegal filename characters for cross-platform compatibility
+		// Windows: < > : " / \ | ? *
+		// macOS: : /
+		// Linux: /
 		return filename.replace(/[/\\:*?"<>|]/g, '');
+	}
+
+	getNotePathForEvent(event: CalendarEvent): string {
+		// Use same logic as createNoteFromEvent to build the path
+		const year = event.start.getFullYear();
+		const month = String(event.start.getMonth() + 1).padStart(2, '0');
+		const day = String(event.start.getDate()).padStart(2, '0');
+		const dateStr = `${year}-${month}-${day}`;
+
+		const sanitizedSummary = this.sanitizeFilename(event.summary);
+		const fileName = `${dateStr} - ${sanitizedSummary}.md`;
+		const folderPath = this.plugin.settings.notesFolder;
+
+		return `${folderPath}/${fileName}`;
+	}
+
+	noteExistsForEvent(event: CalendarEvent): boolean {
+		const notePath = this.getNotePathForEvent(event);
+		const file = this.app.vault.getAbstractFileByPath(notePath);
+		return file !== null;
 	}
 
 	async createNoteFromEvent(event: CalendarEvent) {
@@ -663,9 +686,8 @@ class CalendarView extends ItemView {
 				hasDescription: !!event.description
 			});
 
-			// Create filename: "YYYY-MM-DD - Event Title"
-			const sanitizedSummary = this.sanitizeFilename(event.summary);
-			const fileName = `${dateStr} - ${sanitizedSummary}.md`;
+			// Get note path using same logic as noteExistsForEvent
+			const filePath = this.getNotePathForEvent(event);
 			const folderPath = this.plugin.settings.notesFolder;
 
 			// Ensure folder exists
@@ -674,17 +696,16 @@ class CalendarView extends ItemView {
 				await this.app.vault.createFolder(folderPath);
 			}
 
-			// Create the note
-			const filePath = `${folderPath}/${fileName}`;
+			// Check if note already exists
 			const existingFile = this.app.vault.getAbstractFileByPath(filePath);
 
 			if (existingFile) {
-				new Notice(`Note already exists: ${fileName}`);
+				new Notice(`Opening existing note`);
 				// Open the existing note
 				await this.app.workspace.openLinkText(filePath, '', false);
 			} else {
 				const newFile = await this.app.vault.create(filePath, noteContent);
-				new Notice(`Created note: ${fileName}`);
+				new Notice(`Created note`);
 				// Open the new note
 				await this.app.workspace.openLinkText(filePath, '', false);
 			}

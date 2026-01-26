@@ -118,3 +118,18 @@
 .meeting-notes-create-btn:hover {
 	background: var(--background-modifier-hover);
 }
+
+.meeting-notes-open-btn {
+	padding: 6px 12px;
+	cursor: pointer;
+	border-radius: 4px;
+	font-size: 0.9em;
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	border: none;
+	opacity: 0.85;
+}
+
+.meeting-notes-open-btn:hover {
+	opacity: 1;
+}
