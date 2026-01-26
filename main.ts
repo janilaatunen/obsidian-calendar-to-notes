@@ -1,4 +1,4 @@
-import { App, Plugin, PluginSettingTab, Setting, Notice, ItemView, WorkspaceLeaf, Modal, requestUrl, Platform } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting, Notice, ItemView, WorkspaceLeaf, Modal, requestUrl, Platform, TFile } from 'obsidian';
 import ICAL from 'ical.js';
 
 const VIEW_TYPE_CALENDAR = 'calendar-view';
@@ -631,7 +631,7 @@ class CalendarView extends ItemView {
 				return;
 			}
 
-			const templateContent = await this.app.vault.read(templateFile as any);
+			const templateContent = await this.app.vault.read(templateFile as TFile);
 
 			// Format the date for the filename and frontmatter
 			const year = event.start.getFullYear();
