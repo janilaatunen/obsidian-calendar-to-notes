@@ -100,7 +100,11 @@ export default class MeetingNotesPlugin extends Plugin {
 		const leaves = workspace.getLeavesOfType(VIEW_TYPE_CALENDAR);
 
 		if (leaves.length > 0) {
-			// A leaf with our view already exists, use that
+			// Close any duplicate views (keep only the first one)
+			for (let i = 1; i < leaves.length; i++) {
+				leaves[i].detach();
+			}
+			// Use the first (remaining) leaf
 			leaf = leaves[0];
 		} else {
 			// Create a new leaf in the right sidebar

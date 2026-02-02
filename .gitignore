@@ -1,12 +1,4 @@
-# npm
-node_modules
-
-# build
+.DS_Store
+node_modules/
 main.js
 *.js.map
-
-# obsidian
-data.json
-
-# macOS
-.DS_Store
