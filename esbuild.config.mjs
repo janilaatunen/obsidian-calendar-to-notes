@@ -4,7 +4,7 @@ import builtins from "builtin-modules";
 import { copyFileSync } from "fs";
 import { homedir } from "os";
 
-const vault = `${homedir()}/Obsidian/Codex/.obsidian/plugins/obsidian-calendar-to-notes`;
+const vault = `${homedir()}/Obsidian/Codex/.obsidian/plugins/calendar-to-notes`;
 
 const deployPlugin = {
 	name: "vault-deploy",

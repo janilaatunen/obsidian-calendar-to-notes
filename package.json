@@ -1,12 +1,12 @@
 {
   "name": "obsidian-calendar-to-notes",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Sync ICS calendar events and create meeting notes",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
-    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-    "deploy": "cp main.js styles.css manifest.json ~/Obsidian/Codex/.obsidian/plugins/obsidian-calendar-to-notes/",
+    "build": "./node_modules/.bin/tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "deploy": "cp main.js styles.css manifest.json ~/Obsidian/Codex/.obsidian/plugins/calendar-to-notes/",
     "build:deploy": "npm run build && npm run deploy",
     "version": "node version-bump.mjs && git add manifest.json versions.json"
   },
