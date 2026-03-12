@@ -1,4 +1,9 @@
 .DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 node_modules/
 main.js
 *.js.map
