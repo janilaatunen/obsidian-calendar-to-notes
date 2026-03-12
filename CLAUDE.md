@@ -20,8 +20,8 @@ Obsidian plugin that syncs calendar events to notes via ICS feeds.
 
 ```bash
 npm install
-npm run build   # Production build → main.js + styles.css
-npm run dev     # Watch mode
+npm run build   # Production build → main.js + styles.css, auto-deploys to vault
+npm run dev     # Watch mode, auto-deploys to vault on every save
 ```
 
 ## Build Output
@@ -32,14 +32,13 @@ npm run dev     # Watch mode
 
 ## Deployment
 
-After committing, copy built files to vault:
+Build and deploy are automatic — esbuild copies files to the vault after every build.
 
-```bash
-cp main.js styles.css manifest.json \
-  ~/Obsidian/Codex/.obsidian/plugins/obsidian-calendar-to-notes/
-```
+**After any code change, run `npm run build` to build and deploy to vault.**
 
 Then reload Obsidian (Cmd+Option+I to open console and check for errors).
+
+> **Claude Code:** Always run `npm run build` after making any code changes to this plugin.
 
 ## Git
 
